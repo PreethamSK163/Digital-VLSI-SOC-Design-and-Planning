@@ -138,3 +138,10 @@ Vertical layout components were inspected using the same selection and query pro
 - Vertical power straps and side I/O pins were selected and analyzed using `s` and `what`.  
 - Metal layer assignments (typically `met3`) were verified, confirming a valid multi-layer routing grid for subsequent placement and routing stages.
 
+**Screenshots :**
+![Magic Floorplan 1](3_Review_floorplan_layout_in_magic_1.png)
+![Magic Floorplan 2](3_Review_floorplan_layout_in_magic_2.png)
+![Magic Floorplan 3](3_Review_floorplan_layout_in_magic_3.png)
+![Magic Floorplan 4](3_Review_floorplan_layout_in_magic_4.png)
+![Magic Floorplan 5](3_Review_floorplan_layout_in_magic_5.png)
+![Magic Floorplan 6](3_Review_floorplan_layout_in_magic_6.png)
