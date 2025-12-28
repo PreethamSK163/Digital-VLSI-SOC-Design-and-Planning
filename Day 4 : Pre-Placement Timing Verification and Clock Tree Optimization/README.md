@@ -1,5 +1,38 @@
 # Day 4 : Pre-Placement Timing Verification and Clock Tree Optimization
 
+## Summary of Day 4
+
+On Day 4, I focused on bridging the gap between synthesized logic and physical implementation by performing detailed timing verification and optimizing the clock distribution network for the `picorv32a` design. The main achievements of the day include:
+
+1. **Preparing Layout for Routing**
+   - Converted custom inverter layouts into track-aligned cells.
+   - Ensured pins and boundaries matched the Sky130 routing grid.
+   - Generated a LEF file for the custom inverter to integrate with OpenLANE.
+
+2. **Understanding and Integrating Timing Libraries**
+   - Analyzed Liberty (.lib) files to link physical cells with timing models.
+   - Verified cell delay, pin capacitance, and rise/fall transitions.
+   - Ensured STA-ready netlists included both library cells and the custom inverter.
+
+3. **Synthesis Optimization**
+   - Identified and resolved slack violations using OpenLANE configuration adjustments.
+   - Used gate sizing, buffer insertion, and fanout control to reduce negative slack.
+   - Performed manual ECOs to fix critical paths without re-running full synthesis.
+
+4. **Post-Synthesis Timing Analysis**
+   - Leveraged OpenSTA to verify WNS, TNS, setup, and hold slacks.
+   - Analyzed fanout, capacitance, and net delays to pinpoint performance bottlenecks.
+   - Iteratively refined the netlist to meet timing constraints.
+
+5. **Clock Tree Synthesis (CTS)**
+   - Built the clock tree using TritonCTS to distribute the clock to all flip-flops.
+   - Verified clock insertion delay, skew, and hold slack.
+   - Observed placement of buffers in the DEF file for visual confirmation.
+
+6. **Impact of Buffer Drive Strength**
+   - Experimented with larger CTS buffers (`clkbuf_4`, `clkbuf_8`) to optimize transition and reduce skew.
+   - Identified trade-offs in area and dynamic power consumption.
+   - Determined the optimal buffer size that balanced Power, Performance, and Area (PPA).
 
 ## Task 1 – Converting Grid Info to Track Info
 
@@ -555,3 +588,53 @@ Compared these results with OpenLANE internal logs:
 ![11_Execute_OPENSTA_with_right_timing_libraries_5](11_Execute_OPENSTA_with_right_timing_libraries_5.png)
 ![11_Execute_OPENSTA_with_right_timing_libraries_6](11_Execute_OPENSTA_with_right_timing_libraries_6.png)
 ![11_Execute_OPENSTA_with_right_timing_libraries_7](11_Execute_OPENSTA_with_right_timing_libraries_7.png)
+
+
+## Task 12 – Observing the Impact of Bigger CTS Buffers
+
+In this task, I explored the physical trade-offs of Clock Tree Synthesis by analyzing how the size of the clock buffers impacts timing, power, and area. By experimenting with larger buffers, I observed how "drive strength" can be used to fix skew and transition violations.
+
+**Modifying the CTS Buffer List**
+
+I modified the `CTS_CLK_BUFFER_LIST` to include larger, higher-drive variants from the Sky130 library (e.g., `sky130_fd_sc_hd__clkbuf_4` or `sky130_fd_sc_hd__clkbuf_8`).
+
+- Larger buffers have lower output resistance, allowing them to charge the gate capacitances of the flip-flops faster.
+
+**Impact on Transition (Slew) and Delay**
+
+After re-running CTS with the larger buffers, I analyzed the timing reports:
+
+- Faster Transitions: The **Slew Rate** on the clock pins decreased, resulting in sharper clock edges and improved switching predictability.  
+- Reduced Insertion Delay: Stronger buffers reduced the total delay from the clock root to the sinks, helping with setup timing.
+
+**Analyzing the Impact on Clock Skew**
+
+I compared the skew of the design with small vs. large buffers:
+
+- Better Balancing: Larger buffers can drive more flip-flops simultaneously, allowing a shallower clock tree and resulting in **Lower Clock Skew**.  
+- Verified the improvement using `report_clock_skew` to see the arrival time difference between branches of the `picorv32a` tree.
+
+**Trade-offs: Area and Power**
+
+While timing improved, I observed the costs of using larger buffers:
+
+- Increased Area: Larger buffers occupy more tracks in the layout.  
+- Higher Dynamic Power: Larger transistors have higher gate capacitance, requiring more current to switch, increasing the power consumption of the clock network.
+
+**Final Optimization Selection**
+
+Based on the results, I determined the "Sweet Spot" for the `picorv32a` design:
+
+- Verified that the improvement in timing and skew justified the increase in area, balancing Power, Performance, and Area (PPA) for the project.
+
+**Screenshot:**
+![12_Observe_impact_of_bigger_cts_buffers_1](12_Observe_impact_of_bigger_cts_buffers_1.png)
+![12_Observe_impact_of_bigger_cts_buffers_2](12_Observe_impact_of_bigger_cts_buffers_2.png)
+![12_Observe_impact_of_bigger_cts_buffers_3](12_Observe_impact_of_bigger_cts_buffers_3.png)
+![12_Observe_impact_of_bigger_cts_buffers_4](12_Observe_impact_of_bigger_cts_buffers_4.png)
+![12_Observe_impact_of_bigger_cts_buffers_5](12_Observe_impact_of_bigger_cts_buffers_5.png)
+![12_Observe_impact_of_bigger_cts_buffers_6](12_Observe_impact_of_bigger_cts_buffers_6.png)
+![12_Observe_impact_of_bigger_cts_buffers_7](12_Observe_impact_of_bigger_cts_buffers_7.png)
+![12_Observe_impact_of_bigger_cts_buffers_8](12_Observe_impact_of_bigger_cts_buffers_8.png)
+![12_Observe_impact_of_bigger_cts_buffers_9](12_Observe_impact_of_bigger_cts_buffers_9.png)
+![12_Observe_impact_of_bigger_cts_buffers_10](12_Observe_impact_of_bigger_cts_buffers_10.png)
