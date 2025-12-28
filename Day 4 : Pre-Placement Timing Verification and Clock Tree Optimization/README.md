@@ -456,3 +456,53 @@ Generated a final summary report for the `picorv32a` design:
 ![9_Lab_steps_to_verify_cts_run_11](9_Lab_steps_to_verify_cts_run_11.png)
 ![9_Lab_steps_to_verify_cts_run_12](9_Lab_steps_to_verify_cts_run_12.png)
 ![9_Lab_steps_to_verify_cts_run_13](9_Lab_steps_to_verify_cts_run_13.png)
+
+
+## Task 10 – Analyzing Timing with Real Clock
+
+In this task, I performed the final timing audit of the `picorv32a` design using the Real Clock model. This accounts for the actual propagation delays through the physical buffers, verifying that the clock tree built earlier is robust.
+
+**Switching from Ideal to Real Clock**
+
+I configured the timing tool to recognize the physical clock tree:
+
+- Set propagation mode with `set_propagated_clock [all_clocks]`.  
+- This ensures that the timing engine calculates the delay through every buffer in the clock tree instead of assuming an ideal zero-delay clock.
+
+**Deep Dive into Setup Analysis (Real Clock)**
+
+I analyzed the Setup Slack with the real clock:
+
+- Observed that the clock takes time to reach the Capture flip-flop, slightly shifting the available window for logic to settle.  
+- Checked Worst Negative Slack (WNS) to ensure insertion delays did not cause setup violations.
+
+**Deep Dive into Hold Analysis (Real Clock)**
+
+Hold violations are affected by the physical clock distribution:
+
+- Verified that the clock reaches Launch and Capture flip-flops at slightly different times.  
+- Confirmed Hold Slack remained positive. Any negative slack here would require additional data-path buffers.
+
+**Analyzing Slew and Transition Times**
+
+With the real clock, signal slopes are physically realized:
+
+- Inspected `report_clock_skew` output to view transition times at leaf clock pins.  
+- Verified no clock pin exceeded the maximum transition time allowed by the Sky130 library, ensuring signal integrity and avoiding excessive power consumption.
+
+**Final Timing Closure Report**
+
+Generated full timing reports in OpenSTA:
+
+- `report_checks -path_delay max` (for Setup)  
+- `report_checks -path_delay min` (for Hold)  
+- Confirmed that both Setup and Hold slacks were positive, meaning the design is stable and ready for final routing.
+
+**Screenshot:**
+![10_Analyze_timing_with_real clock_1](10_Analyze_timing_with_real clock_1.png)
+![10_Analyze_timing_with_real clock_2](10_Analyze_timing_with_real clock_2.png)
+![10_Analyze_timing_with_real clock_3](10_Analyze_timing_with_real clock_3.png)
+![10_Analyze_timing_with_real clock_4](10_Analyze_timing_with_real clock_4.png)
+![10_Analyze_timing_with_real clock_5](10_Analyze_timing_with_real clock_5.png)
+![10_Analyze_timing_with_real clock_6](10_Analyze_timing_with_real clock_6.png)
+![10_Analyze_timing_with_real clock_7](10_Analyze_timing_with_real clock_7.png)
