@@ -340,3 +340,61 @@ I performed a final check to ensure no new violations were introduced:
 **Screenshots :**
 ![7_Basic_timing_eco_1](7_Basic_timing_eco_1.png)
 ![7_Basic_timing_eco_2](7_Basic_timing_eco_2.png)
+
+
+## Task 8 – Running CTS using TritonCTS
+
+In this task, I transitioned from a timing-optimized netlist to building the actual clock distribution network. This ensures the clock signal reaches every flip-flop in the `picorv32a` core simultaneously, minimizing clock skew and fixing hold violations.
+
+**Preparing the Environment for CTS**
+
+Before running clock tree synthesis, I made sure the design was ready:
+
+- Placement DEF file (from Day 2) and timing-optimized netlist (from ECO task) were available.  
+- Cells were legalized and placed in rows, so the tool could locate all clock pins.  
+
+**Executing the TritonCTS Command**
+
+I ran the TritonCTS engine to construct the clock tree:
+
+- The tool analyzed the clock net and built a "tree" structure.  
+- Clock buffers from the Sky130 library were inserted to balance load and maintain signal integrity.  
+
+**Monitoring the Clock Tree Construction**
+
+While TritonCTS ran, I observed:
+
+- **Root Pin Identification:** Main `clk` input pin detected.  
+- **Sink Clustering:** Nearby flip-flops grouped under local clock buffers.  
+- **Level-by-Level Balancing:** Buffers added to equalize delays from root to all flip-flops.
+
+**Reviewing CTS Reports & Hold Slack Fix**
+
+After CTS completed, I checked the reports:
+
+- **Clock Skew:** Difference between fastest and slowest flip-flop arrival times.  
+- **Clock Latency:** Time for clock to propagate from source to sinks.  
+- **Hold Slack Improvement:** Adding physical buffers and delays naturally reduced hold violations.
+
+**Inspecting the Post-CTS DEF**
+
+The terminal confirmed creation of `results/cts/picorv32a.cts.def`:
+
+- File contains thousands of new components (Clock Buffers like `sky130_fd_sc_hd__clkbuf_1`).  
+- `clk` net now connects through a complex network of nets and buffers rather than directly to every flip-flop.
+
+**Screenshot:**
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_1](8_Lab_steps_to_run_CTS_using_Triton_CTS_1.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_2](8_Lab_steps_to_run_CTS_using_Triton_CTS_2.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_3](8_Lab_steps_to_run_CTS_using_Triton_CTS_3.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_4](8_Lab_steps_to_run_CTS_using_Triton_CTS_4.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_5](8_Lab_steps_to_run_CTS_using_Triton_CTS_5.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_6](8_Lab_steps_to_run_CTS_using_Triton_CTS_6.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_7](8_Lab_steps_to_run_CTS_using_Triton_CTS_7.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_8](8_Lab_steps_to_run_CTS_using_Triton_CTS_8.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_9](8_Lab_steps_to_run_CTS_using_Triton_CTS_9.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_10](8_Lab_steps_to_run_CTS_using_Triton_CTS_10.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_11](8_Lab_steps_to_run_CTS_using_Triton_CTS_11.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_12](8_Lab_steps_to_run_CTS_using_Triton_CTS_12.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_13](8_Lab_steps_to_run_CTS_using_Triton_CTS_13.png)
+![8_Lab_steps_to_run_CTS_using_Triton_CTS_14](8_Lab_steps_to_run_CTS_using_Triton_CTS_14.png)
