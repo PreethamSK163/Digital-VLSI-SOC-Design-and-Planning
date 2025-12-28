@@ -166,3 +166,48 @@ Using Magic, the input and output nodes of the inverter were verified:
 ![Std Cell Layout 6](4_Lab_step_to_creat_std_layout_6.png)  
 ![Std Cell Layout 7](4_Lab_step_to_creat_std_layout_7.png)  
 ![Std Cell Layout 8](4_Lab_step_to_creat_std_layout_8.png)
+
+## Task 5 - Creating the Final SPICE Deck
+
+**1. Opening the Extracted SPICE File**  
+
+Opened `sky130_inv.spice` and verified transistor definitions (PMOS/NMOS) and parasitic capacitances from Magic extraction.
+
+**2. Including Sky130 Technology Models**  
+
+- Added include statements for Sky130 NMOS (`nshort.lib`) and PMOS (`pshort.lib`) files.  
+- Ensures simulator recognizes transistor electrical characteristics (Vth, mobility, etc.).
+
+**3. Defining Power Supplies and Inputs**  
+
+- **VDD Supply:** 1.8V between VDD and GND.  
+- **Pulse Input (A):** Defined initial value, pulsed value, delay, rise/fall times, and pulse width at input node.  
+- **Observation:** Allows observation of inverter switching behavior.
+
+**4. Setting the Parasitic Capacitance and Load**  
+
+- Verified extracted parasitic capacitances and output load (Cload) at output node Y.  
+- Ensures realistic delay and waveform simulation.
+
+**5. Adding Simulation Commands**  
+
+- **`.tran` (Transient Analysis):** e.g., `0.01n` step to `20n` total time.  
+- **`.option`:** Scale set to microns to match Magic layout.
+
+**6. Executing the Simulation in ngspice**  
+
+- **Command:** `ngspice sky130_inv.spice`  
+- Simulator loads the circuit, includes libraries, and prepares waveform data.  
+- Terminal checked for errors or warnings to confirm SPICE deck correctness.
+
+**Screenshots :**  
+![SPICE Deck 1](5_Create_final_SPICE_deck_using_Sky130_tech_1.png)  
+![SPICE Deck 2](5_Create_final_SPICE_deck_using_Sky130_tech_2.png)  
+![SPICE Deck 3](5_Create_final_SPICE_deck_using_Sky130_tech_3.png)  
+![SPICE Deck 4](5_Create_final_SPICE_deck_using_Sky130_tech_4.png)  
+![SPICE Deck 5](5_Create_final_SPICE_deck_using_Sky130_tech_5.png)  
+![SPICE Deck 6](5_Create_final_SPICE_deck_using_Sky130_tech_6.png)  
+![SPICE Deck 7](5_Create_final_SPICE_deck_using_Sky130_tech_7.png)  
+![SPICE Deck 8](5_Create_final_SPICE_deck_using_Sky130_tech_8.png)  
+![SPICE Deck 9](5_Create_final_SPICE_deck_using_Sky130_tech_9.png)
+
