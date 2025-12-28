@@ -79,3 +79,47 @@ This task involves setting up a custom standard cell that will be integrated int
 ![Clone 3](2_Lab_steps_to_clone_github_3.png)  
 ![Clone 4](2_Lab_steps_to_clone_github_4.png)  
 ![Clone 5](2_Lab_steps_to_clone_github_5.png)
+
+
+## Task 3 - Sky130 Basic Layer and Layout Analysis
+
+**1. Identifying CMOS Components**  
+
+With the `sky130_inv.mag` file open in Magic, you examined the physical structure of the inverter to identify the two primary transistors:
+
+- **PMOS Transistor:** Located at the top of the layout, identified by the P-diffusion (`pdiff`) layer and its connection to the VDD rail.  
+- **NMOS Transistor:** Located at the bottom of the layout, identified by the N-diffusion (`ndiff`) layer and its connection to the Ground (GND) rail.
+
+**2. Analyzing the Poly-Silicon Gate**  
+
+You observed the vertical Polysilicon (`poly`) strip that crosses both the `ndiff` and `pdiff` regions:
+
+- **Gate Formation:** Intersection of the Poly layer and Diffusion layers forms the transistor channel.  
+- **Common Input:** The Poly strip acts as a common gate for both transistors, forming the single input (A) of the inverter.
+
+**3. Connection and Layer Verification**  
+
+Using selection and query techniques, you identified the interconnects:
+
+- **Metal 1 (li1):** Local interconnect layer for internal connections and output (Y) port.  
+- **Contacts (mcon/viali):** Small squares connecting diffusion areas to metal layers.  
+- **Substrate Taps:** N-well and P-substrate contacts bias the transistor bodies to prevent latch-up.
+
+**4. Extracting Layer Information**  
+
+You used the Magic command window to confirm layer details:
+
+- **Selection:** Hovered cursor over a colored region and pressed `s`.  
+- **Command:** Typed `what` in the `tkcon` window.  
+- **Result:** Output displayed layer name (e.g., `nwell`, `poly`, `li1`), allowing mapping of visual colors to actual Sky130 layers.
+
+**5. DRC (Design Rule Check) Status**  
+
+You monitored the DRC indicator at the top of Magic:
+
+- "0" or green checkmark confirmed layout follows Sky130 design rules (spacing, width, etc.).  
+- Ensures manufacturability before extraction.
+
+**Screenshots :**  
+![Sky130 Layer Layout 1](3_Lab_to_Sky130_basic_layerlayouts_1.png)  
+![Sky130 Layer Layout 2](3_Lab_to_Sky130_basic_layerlayouts_2.png)
