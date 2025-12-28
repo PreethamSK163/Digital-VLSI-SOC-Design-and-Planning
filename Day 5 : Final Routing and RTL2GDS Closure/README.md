@@ -135,3 +135,59 @@ I initiated the routing process using:
 ![3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_2](3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_2.png)
 ![3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_3](3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_3.png)
 ![3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_4](3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_4.png)
+
+## Task 4 – Post-Route Parasitic Extraction and Final GDSII Generation
+
+In this task, I completed the post-routing sign-off steps by extracting real wire parasitics and generating the final manufacturable GDSII layout of the `picorv32a` design.
+
+**1. Post-Route Parasitic Extraction (SPEF)**
+
+After detailed routing, all interconnects became physical metal wires with resistance and capacitance. I extracted these parasitics using a standalone SPEF extractor to make timing analysis realistic.
+
+- The merged LEF and final routed DEF were used as inputs.  
+- The extractor generated a `.spef` file containing wire RC data for every net.
+
+**SPEF Generation Syntax Used**
+
+The following commands were used to perform post-route parasitic extraction using the standalone SPEF extractor:
+
+**Change directory**
+
+- `cd Desktop/work/tools/SPEF_EXTRACTOR`
+
+**Command extract spef**
+
+- `python3 main.py /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/27-12_12-17/tmp/merged.lef /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/27-12_12-17/results/routing/14-fastroute.def`
+
+
+**2. Transition from Routing to Timing Sign-off**
+
+With the SPEF file available, timing analysis now reflected real physical behavior:
+
+- Wire delays were added to cell delays.  
+- Setup and hold timing were verified with actual interconnect resistance and capacitance.  
+- This confirmed that timing closure was still maintained after routing.
+
+**3. Final GDSII Generation (Tape-Out Stage)**
+
+Once timing was validated, I proceeded to generate the final layout database:
+
+- Magic was used to stream out the GDSII file.  
+- The generated `picorv32a.gds` contains all geometric layers required for fabrication.  
+- This step marks the official RTL-to-GDS completion.
+
+**4. Visual Inspection of Final Layout**
+
+The final GDSII was opened in Magic for inspection:
+
+- Verified complete signal routing, clock tree, and PDN integration.  
+- Confirmed presence of standard cells, clock buffers, and the custom `sky130_vsdinv` cell.  
+- Ensured the design was DRC-clean and fabrication-ready.
+
+**Screenshot:**
+![4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_1](4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_1.png)
+![4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_2](4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_2.png)
+![4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_3](4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_3.png)
+![4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_4](4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_4.png)
+![4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_5](4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_5.png)
+![4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_6](4_Post_Route_Parasitic_Extraction_and_Final_GDSII_Generation_6.png)
