@@ -1,5 +1,33 @@
 # Day2_Floorplanning_and_Library_Cells_Overview
 
+## Summary of Day 2
+
+- **Objective:** Transition the synthesized netlist into a physically defined design by executing and validating the floorplanning and placement stages of the OpenLANE flow.
+- **Floorplanning Execution:**  
+  - Executed `run_floorplan` to define die area, core area, utilization factor, aspect ratio, and core margins.  
+  - Automatically placed I/O pins using `ioplacer` with appropriate metal layer assignments.  
+  - Inserted physical-only cells such as tap cells and decoupling capacitors to ensure substrate integrity and power stability.  
+  - Generated the floorplan DEF capturing core/die boundaries, pin locations, and site rows.
+- **Design & Library Configuration Review:**  
+  - Reviewed design and library configuration files to verify clock, utilization, and aspect ratio settings.  
+  - Confirmed correct linkage of Sky130 HD standard cell libraries and Liberty timing files.  
+  - Inspected the merged LEF file combining technology and cell-level physical data used for placement.
+- **Floorplan DEF Analysis:**  
+  - Verified DEF units and coordinate scaling.  
+  - Checked component and pin definitions to ensure physical data integrity after floorplanning.
+- **Floorplan Visualization using Magic:**  
+  - Loaded the floorplan DEF into Magic for graphical inspection.  
+  - Verified die/core boundaries, standard cell rows, I/O pin distribution, and metal layer assignments.
+- **Congestion-Aware Placement:**  
+  - Executed `run_placement` to perform global placement using RePlAce.  
+  - Observed HPWL and overflow convergence during optimization.  
+  - Completed detailed placement and legalization using OpenDP.
+- **Placement Result Validation:**  
+  - Confirmed successful generation of the placement DEF file with legal standard cell coordinates.
+- **Outcome:**  
+  - Successfully transformed the design from an abstract floorplan into a legally placed layout.  
+  - Established a solid physical foundation for subsequent CTS and routing stages.
+
 
 ## Task 1 - Floorplan Execution & Result Analysis
 
