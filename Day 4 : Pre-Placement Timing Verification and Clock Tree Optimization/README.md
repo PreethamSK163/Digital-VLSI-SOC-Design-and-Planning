@@ -383,7 +383,7 @@ The terminal confirmed creation of `results/cts/picorv32a.cts.def`:
 - File contains thousands of new components (Clock Buffers like `sky130_fd_sc_hd__clkbuf_1`).  
 - `clk` net now connects through a complex network of nets and buffers rather than directly to every flip-flop.
 
-**Screenshot:**
+**Screenshots :**
 ![8_Lab_steps_to_run_CTS_using_Triton_CTS_1](8_Lab_steps_to_run_CTS_using_Triton_CTS_1.png)
 ![8_Lab_steps_to_run_CTS_using_Triton_CTS_2](8_Lab_steps_to_run_CTS_using_Triton_CTS_2.png)
 ![8_Lab_steps_to_run_CTS_using_Triton_CTS_3](8_Lab_steps_to_run_CTS_using_Triton_CTS_3.png)
@@ -398,3 +398,61 @@ The terminal confirmed creation of `results/cts/picorv32a.cts.def`:
 ![8_Lab_steps_to_run_CTS_using_Triton_CTS_12](8_Lab_steps_to_run_CTS_using_Triton_CTS_12.png)
 ![8_Lab_steps_to_run_CTS_using_Triton_CTS_13](8_Lab_steps_to_run_CTS_using_Triton_CTS_13.png)
 ![8_Lab_steps_to_run_CTS_using_Triton_CTS_14](8_Lab_steps_to_run_CTS_using_Triton_CTS_14.png)
+
+
+## Task 9 – Verifying the CTS Run
+
+In this task, I performed the final verification of the Clock Tree Synthesis. This step moves the design from "ideal" timing to "real" timing, where the clock travels through physical buffers and wires.
+
+**Verification of the Post-CTS Netlist**
+
+I first confirmed that the netlist reflects the physical clock tree:
+
+- Used `read_verilog` or `current_design` to ensure the CTS-integrated netlist was loaded.  
+- Searched for `clkbuf` instances and verified that the single `clk` net was replaced by a hierarchical network of Sky130 clock buffers.
+
+**Inspecting the New Clock Path in OpenSTA**
+
+I returned to OpenSTA to analyze how physical buffers affected timing:
+
+- Ran `report_checks -path_delay min_max`.  
+- Observed insertion delay representing the actual time for the clock to reach capture flip-flops.  
+- Verified that source latency now had a positive value, reflecting real clock propagation.
+
+**Skew and Slack Confirmation**
+
+I analyzed the clock skew and hold slack:
+
+- Verified global skew was within limits (typically < 10% of the clock period).  
+- Checked hold slack, which improved due to buffer delays in the real clock network.
+
+**Visual Verification in Magic**
+
+To see the CTS results physically, I opened the generated DEF file in Magic:
+
+- Ran `magic -T sky130A.tech read ../results/cts/picorv32a.cts.def`.  
+- Zoomed into cell rows and identified clock buffers placed at regular intervals or clustered patterns.  
+- Hovered over a clock buffer and used the `what` command to confirm it was part of the `clk` net hierarchy.
+
+**Final Timing Report Generation**
+
+Generated a final summary report for the `picorv32a` design:
+
+- WNS (Worst Negative Slack) near zero or positive.  
+- TNS (Total Negative Slack) minimized.  
+- Design is now ready for final global and detailed routing.
+
+**Screenshot:**
+![9_Lab_steps_to_verify_cts_run_1](9_Lab_steps_to_verify_cts_run_1.png)
+![9_Lab_steps_to_verify_cts_run_2](9_Lab_steps_to_verify_cts_run_2.png)
+![9_Lab_steps_to_verify_cts_run_3](9_Lab_steps_to_verify_cts_run_3.png)
+![9_Lab_steps_to_verify_cts_run_4](9_Lab_steps_to_verify_cts_run_4.png)
+![9_Lab_steps_to_verify_cts_run_5](9_Lab_steps_to_verify_cts_run_5.png)
+![9_Lab_steps_to_verify_cts_run_6](9_Lab_steps_to_verify_cts_run_6.png)
+![9_Lab_steps_to_verify_cts_run_7](9_Lab_steps_to_verify_cts_run_7.png)
+![9_Lab_steps_to_verify_cts_run_8](9_Lab_steps_to_verify_cts_run_8.png)
+![9_Lab_steps_to_verify_cts_run_9](9_Lab_steps_to_verify_cts_run_9.png)
+![9_Lab_steps_to_verify_cts_run_10](9_Lab_steps_to_verify_cts_run_10.png)
+![9_Lab_steps_to_verify_cts_run_11](9_Lab_steps_to_verify_cts_run_11.png)
+![9_Lab_steps_to_verify_cts_run_12](9_Lab_steps_to_verify_cts_run_12.png)
+![9_Lab_steps_to_verify_cts_run_13](9_Lab_steps_to_verify_cts_run_13.png)
