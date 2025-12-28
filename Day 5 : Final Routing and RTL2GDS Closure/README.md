@@ -89,3 +89,49 @@ Generated a refined DEF including:
 **Screenshot:**
 ![2_Lab_step_from_power_strap_to_tdc_cell_1](2_Lab_step_from_power_strap_to_tdc_cell_1.png)
 
+
+## Task 3 – Global vs Detailed Routing and TritonRoute Configuration
+
+In this task, I moved into the routing phase, where the actual metal connections are created between all placed cells based on the synthesized netlist.
+
+**1. Two-Stage Routing Flow**
+
+Routing is performed in two main stages to manage complexity:
+
+- **Global Routing (FastRoute):** The design is divided into grid-based G-cells, and approximate paths are planned for each net to reduce congestion.  
+- **Detailed Routing (TritonRoute):** Exact metal shapes and vias are placed while strictly following Sky130 DRC rules.
+
+**2. TritonRoute Technology Awareness**
+
+I verified how TritonRoute adapts to the Sky130 process:
+
+- **LEF-Based Routing:** The router reads standard cell LEFs and the custom inverter LEF to identify pins and routing blockages.  
+- **Routing Algorithm:** TritonRoute applies optimization techniques to prioritize boundary pins first and then complete internal routing.
+
+**3. Routing Configuration Parameters**
+
+Before running routing, I checked key OpenLANE variables:
+
+- **`ROUTING_STRATEGY`:** Controls the balance between runtime and routing quality.  
+- **`ROUTING_OPT_ITERS`:** Defines the number of optimization passes to reduce DRC violations.
+
+**4. Pre-routing Analysis**
+
+Before detailed routing, the tool performs preparation steps:
+
+1. Identifies all nets in the `picorv32a` design.  
+2. Builds a connectivity graph.  
+3. Assigns metal layers (`met1`–`met5`) based on net length and resistance requirements, with long nets pushed to higher layers.
+
+**5. Executing the Routing Command**
+
+I initiated the routing process using:
+
+- **Command:** `run_routing`  
+- **Observation:** Initial DRC violations were reported during early iterations, which is expected and handled in subsequent optimization passes.
+
+**Screenshot:**
+![3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_1](3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_1.png)
+![3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_2](3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_2.png)
+![3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_3](3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_3.png)
+![3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_4](3_Basics_of_global_and_detail_routing_and_configure_TritonRoute_4.png)
