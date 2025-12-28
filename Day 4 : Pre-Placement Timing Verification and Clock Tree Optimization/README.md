@@ -298,3 +298,45 @@ Finally, I checked the results of the optimization:
 ![Optimized Synthesis 10](6_Optimize_synthesis_to_reduce_step_violation_10.png)
 
 
+## Task 7 – Basic Timing ECO (Engineering Change Order)
+
+In this task, I performed a manual ECO to fix specific timing violations without re-running the entire synthesis flow. This was crucial for closing timing on critical paths where automated tools needed extra guidance.
+
+**Identifying the Critical Path in OpenSTA**
+
+I used OpenSTA to find nets or gates causing timing violations:
+
+- Ran `report_checks` to identify a path with negative slack.  
+- Targeted pins with high slew or capacitance slowing the signal.  
+- Observed a specific buffer or inverter that was too small to drive its load.
+
+**Performing the Manual Cell Replacement**
+
+Instead of changing global variables, I swapped the problematic cell locally:
+
+- Used `replace_cell <instance_name> <new_lib_cell_name>` to replace a small inverter with a larger, stronger version.  
+- This fixed the local timing issue without affecting the rest of the design.
+
+**Verifying the Slack Improvement**
+
+After replacement, I re-ran timing checks:
+
+- Used `report_checks -through <affected_net>` to observe slack.  
+- Slack for that path improved from negative to positive by upsizing the gate and reducing transition time.
+
+**Updating the Netlist**
+
+Once satisfied with the changes, I saved the updated netlist:
+
+- Ran `write_verilog <filename>.v` to store the ECOed netlist.  
+- This new netlist now contains the faster gates and is ready for subsequent CTS and routing stages.
+
+**Final Timing Clean-up**
+
+I performed a final check to ensure no new violations were introduced:
+
+- Verified that Total Negative Slack (TNS) for the entire `picorv32a` design had decreased toward zero.
+
+**Screenshots :**
+![7_Basic_timing_eco_1](7_Basic_timing_eco_1.png)
+![7_Basic_timing_eco_2](7_Basic_timing_eco_2.png)
