@@ -62,7 +62,7 @@ I observed that OpenLANE automatically created a timestamped directory under `ru
 **5. Final Parameter Verification**  
 I verified that all 6 metal layers (li1 through met5) were recognized and confirmed that the `sky130_fd_sc_hd` library was correctly linked. This confirmed that my environment was ready for Synthesis.
 
-**Screenshot:**  
+**Screenshots :**  
 ![Design preparation 1](2_Design_preparation_step_1.png)  
 ![Design preparation 2](2_Design_preparation_step_2.png)  
 ![Design preparation 3](2_Design_preparation_step_3.png)  
@@ -74,4 +74,43 @@ I verified that all 6 metal layers (li1 through met5) were recognized and confir
 ![Design preparation 9](2_Design_preparation_step_9.png)  
 ![Design preparation 10](2_Design_preparation_step_10.png)
 
+
+## Task 3 - Logic Synthesis & Functional Mapping
+
+**1. Translation from RTL to Gate-Level Logic**  
+I started by converting my behavioral Verilog code for the `picorv32a` processor into structural hardware using **Yosys**.  
+- I observed how the tool broke down complex if-else statements and arithmetic operations into basic Boolean expressions.  
+- These expressions were then mapped to actual gates available in the **Sky130 High Density (HD)** standard cell library, ensuring that the design is physically realizable.
+
+**2. Technology Mapping & Optimization**  
+After logic analysis, the **ABC** tool performed technology mapping and optimization.  
+- I watched it select appropriate gate sizes to meet the design's speed and area requirements.  
+- Redundant gates were removed through **logic minimization** to save silicon area and power.  
+- Every selected gate came from the `sky130_fd_sc_hd` library, ensuring manufacturability in the SkyWater 130nm process.
+
+**3. Quantitative Analysis (Synthesis Statistics)**  
+I examined the **Statistics Report** generated at the end of synthesis:  
+- **Cell Types:** Identified the standard cells used (AND, OR, NAND, Flip-Flops, etc.).  
+- **Chip Complexity:** Checked the number of cells to understand the physical scale of the processor.  
+- **Chip Area:** Estimated the total silicon area needed for the design, which will guide Floorplanning.
+
+**4. Calculating the Flop Ratio**  
+I manually calculated the **Flop Ratio** to measure sequential density:  
+- Counted the number of **D-Flip-Flops** and divided it by the **total cell count**.  
+- **Insight:** A higher flop ratio indicates a more pipelined architecture (faster but potentially more power-hungry), while a lower ratio indicates more combinational logic. This helps me anticipate challenges in the **Clock Tree Synthesis (CTS)** stage.
+
+**5. Verification of the Netlist**  
+I verified that a new **Gate-Level Netlist (.v)** was generated in the `runs` directory.  
+- This netlist is a detailed list of gates and connections, ready for the next steps in physical design.  
+
+**Screenshots :**  
+![Synthesis 1](3_Logic_Synthesis_and_%20Functional_%20Mapping_2.png)  
+![Synthesis 2](3_Logic_Synthesis_and_%20Functional_%20Mapping_3.png)  
+![Synthesis 3](3_Logic_Synthesis_and_%20Functional_%20Mapping_4.png)  
+![Synthesis 4](3_Logic_Synthesis_and_%20Functional_%20Mapping_5.png)  
+![Synthesis 5](3_Logic_Synthesis_and_%20Functional_%20Mapping_6.png)  
+![Synthesis 6](3_Logic_Synthesis_and_%20Functional_%20Mapping_7.png)  
+![Synthesis 7](3_Logic_Synthesis_and_%20Functional_%20Mapping_8.png)  
+![Synthesis 8](3_Logic_Synthesis_and_%20Functional_%20Mapping_9.png)  
+![Synthesis 9](3_Logic_Synthesis_and_%20Functional_%20Mapping_1.png)
 
