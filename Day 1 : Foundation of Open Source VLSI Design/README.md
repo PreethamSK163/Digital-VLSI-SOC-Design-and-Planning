@@ -1,6 +1,6 @@
-## Day 1 – Foundation of Open Source VLSI Design
+# Day 1 – Foundation of Open Source VLSI Design
 
-**Summary of Day 1:**
+## Summary of Day 1:
 
 - **Objective:** Familiarize with the SkyWater 130nm PDK (`sky130A`) and OpenLANE RTL-to-GDSII flow, preparing the environment for ASIC design.
 - **PDK Exploration:**  
