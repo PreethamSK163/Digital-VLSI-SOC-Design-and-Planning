@@ -1,5 +1,40 @@
 # Day 3 – Magic-Based Standard Cell Design and SPICE Verification
 
+## Summary of Day 3 
+
+On Day 3, the focus was on **custom standard cell creation, layout verification, extraction, and electrical characterization** using Magic and ngspice, preparing the cell for integration into the `picorv32a` SoC design.
+
+1. **I/O Placer Revision**
+   - Refined the floorplan by adjusting I/O pin configurations.
+   - Ensured uniform pin spacing to reduce routing congestion and improve timing slack.
+   - Verified pin positions using Magic (`s` and `what` commands) and terminal logs.
+
+2. **Cloning Custom Inverter Repository**
+   - Pulled the `vsdstdcelldesign` repository containing the inverter layout and initial `.lib`/`.lef` files.
+   - Verified correct directory structure and opened the inverter layout in Magic.
+   - Ensured Sky130 technology file (`sky130A.tech`) was properly linked for accurate layer visualization.
+
+3. **Sky130 Layer and Layout Analysis**
+   - Identified PMOS and NMOS regions, polysilicon gates, metal layers, and substrate taps.
+   - Mapped visual layout colors to actual Sky130 layers using Magic query commands.
+   - Verified design rule compliance (DRC) to ensure manufacturability.
+
+4. **Standard Cell Layout Creation and Port Identification**
+   - Verified input (A), output (Y), VDD, and GND ports.
+   - Created the extraction file (`.ext`) and converted it to a SPICE-compatible netlist (`.spice`) for simulation.
+   - Inspected all horizontal and vertical components to confirm correctness.
+
+5. **SPICE Deck Creation**
+   - Incorporated Sky130 NMOS and PMOS models into the SPICE file.
+   - Defined power supplies, input pulses, output load, and transient simulation commands.
+   - Successfully ran the SPICE deck in ngspice with no errors.
+
+6. **Inverter Characterization**
+   - Plotted input vs output waveforms to observe inverter switching.
+   - Measured **Rise Time (Tr)**, **Fall Time (Tf)**, and **Propagation Delay**.
+   - Verified signal integrity and inverter threshold voltage (Vth) for balanced transistor sizing.
+
+
 ## Task 1 – I/O Placer Revision
 
 This task involved refining the floorplan by adjusting the I/O pin configuration to optimize routing and timing for the `picorv32a` core.
@@ -211,3 +246,48 @@ Opened `sky130_inv.spice` and verified transistor definitions (PMOS/NMOS) and pa
 ![SPICE Deck 8](5_Create_final_SPICE_deck_using_Sky130_tech_8.png)  
 ![SPICE Deck 9](5_Create_final_SPICE_deck_using_Sky130_tech_9.png)
 
+## Task 6 - Inverter Characterization and Timing Analysis
+
+**1. Generating the Transient Waveform**  
+
+- Ran the SPICE deck in `ngspice` and plotted input vs output.  
+- **Command:** `plot y vs time a`  
+- Observed classic inverter behavior with non-ideal slopes due to parasitic capacitances.
+
+**2. Measuring Rise Time (Tr)**  
+
+- Rise time is the duration for the output to transition from 10% to 90% of VDD.  
+- Used cursor in ngspice plot to mark 10% and 90% points.  
+- **Calculation:** Tr = t90% - t10%
+
+**3. Measuring Fall Time (Tf)**  
+
+- Fall time is the duration for the output to transition from 90% to 10% of VDD.  
+- Used plot cursor to identify t90% and t10% on falling edge.  
+- **Calculation:** Tf = t90% - t10%
+
+**4. Calculating Propagation Delay**  
+
+- Measured the time difference between input and output reaching 50% voltage.  
+- **Rise Delay:** Output rising.  
+- **Fall Delay:** Output falling.  
+- Influenced by PMOS/NMOS sizing and output load (Cload).
+
+**5. Analyzing Signal Integrity**  
+
+- Verified inverter threshold voltage (Vth) at the crossing point of input/output waveforms.  
+- Checked that crossing occurs near VDD/2 to ensure balanced PMOS and NMOS sizing.
+
+**Screenshots:**  
+![Inverter Characterization 1](6_Characterize_inverter_using_sky130_model_files_1.png)  
+![Inverter Characterization 2](6_Characterize_inverter_using_sky130_model_files_2.png)  
+![Inverter Characterization 3](6_Characterize_inverter_using_sky130_model_files_3.png)  
+![Inverter Characterization 4](6_Characterize_inverter_using_sky130_model_files_4.png)  
+![Inverter Characterization 5](6_Characterize_inverter_using_sky130_model_files_5.png)  
+![Inverter Characterization 6](6_Characterize_inverter_using_sky130_model_files_6.png)  
+![Inverter Characterization 7](6_Characterize_inverter_using_sky130_model_files_7.png)  
+![Inverter Characterization 8](6_Characterize_inverter_using_sky130_model_files_8.png)  
+![Inverter Characterization 9](6_Characterize_inverter_using_sky130_model_files_9.png)  
+![Inverter Characterization 10](6_Characterize_inverter_using_sky130_model_files_10.png)  
+![Inverter Characterization 11](6_Characterize_inverter_using_sky130_model_files_11.png)  
+![Inverter Characterization 12](6_Characterize_inverter_using_sky130_model_files_12.png)
