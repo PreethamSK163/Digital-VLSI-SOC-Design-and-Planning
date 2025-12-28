@@ -177,7 +177,7 @@ The synthesis log was checked to confirm that the custom `sky130_vsdinv` cell wa
 - **Result:** The log confirmed that the custom inverter was utilized, helping to meet the overall timing goals.
 
 
-**Screenshots**
+**Screenshots :**
 
 ![Synthesis Slack 1](4_Configure_synthesis_setting%20to_fix_slack_1.png)  
 ![Synthesis Slack 2](4_Configure_synthesis_setting%20to_fix_slack_2.png)  
@@ -192,4 +192,63 @@ The synthesis log was checked to confirm that the custom `sky130_vsdinv` cell wa
 ![Synthesis Slack 11](4_Configure_synthesis_setting%20to_fix_slack_11.png)  
 ![Synthesis Slack 12](4_Configure_synthesis_setting%20to_fix_slack_12.png)  
 ![Synthesis Slack 13](4_Configure_synthesis_setting%20to_fix_slack_13.png)  
+
+
+Here’s your Day 4, Task 5 content formatted for a GitHub README with **bold side topics** and proper headings:
+
+
+## Task 5 – OpenSTA for Post-Synthesis Timing Analysis
+
+In this task, you performed a deep-dive Static Timing Analysis (STA) outside of the automated OpenLANE flow. This allows for a more granular inspection of the timing paths in the `picorv32a` design after the synthesis optimizations.
+
+
+
+**Invoking the OpenSTA Tool**
+
+You moved from the general OpenLANE shell to the dedicated OpenSTA environment:
+
+- Executed `sta` in the terminal.  
+- **Purpose:** Provides detailed control over timing reports, allowing isolation of specific "bottleneck" paths.
+
+**Loading the Timing Environment**
+
+To perform the analysis, you manually sourced the necessary design data:
+
+- **Read Libraries:** Loaded the `.lib` files for the Sky130 process.  
+- **Read Netlist:** Pointed to the optimized Verilog netlist from Task 4.  
+- **Read SDC:** Loaded the Synopsys Design Constraints file to define clock period and external delays.
+
+**Reporting Timing Path Details**
+
+A comprehensive timing report was generated:
+
+- **Observation:** Line-by-line breakdown of the "Data Arrival Path." Delays from each gate and interconnect were clearly visible.  
+
+**Analyzing Fanout and Capacitance**
+
+OpenSTA was used to check for electrical violations:
+
+- **Check Fanout:** Identified pins with high fanout slowing signal transitions.  
+- **Check Capacitance:** Verified nets exceeding maximum allowed capacitance.  
+- **Result:** Determined where buffers needed to be added to strengthen signals across the `picorv32a` core.
+
+**Refining the Design via OpenSTA**
+
+Manual adjustments ensured timing closure:
+
+- **Upsizing Cells:** Critical gates with negative slack were replaced with stronger versions.  
+- **Slack Verification:** Reports were re-run to confirm improvements. This iterative process tuned the netlist before physical design.
+
+
+
+**Screenshots :**
+
+![OpenSTA Timing 1](5_OpenSTA_for_post_synth_timing_analysis_1.png)  
+![OpenSTA Timing 2](5_OpenSTA_for_post_synth_timing_analysis_2.png)  
+![OpenSTA Timing 3](5_OpenSTA_for_post_synth_timing_analysis_3.png)  
+![OpenSTA Timing 4](5_OpenSTA_for_post_synth_timing_analysis_4.png)  
+![OpenSTA Timing 5](5_OpenSTA_for_post_synth_timing_analysis_5.png)  
+![OpenSTA Timing 6](5_OpenSTA_for_post_synth_timing_analysis_6.png)  
+![OpenSTA Timing 7](5_OpenSTA_for_post_synth_timing_analysis_7.png)  
+![OpenSTA Timing 8](5_OpenSTA_for_post_synth_timing_analysis_8.png)  
 
