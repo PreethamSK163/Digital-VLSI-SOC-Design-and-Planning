@@ -123,3 +123,46 @@ You monitored the DRC indicator at the top of Magic:
 **Screenshots :**  
 ![Sky130 Layer Layout 1](3_Lab_to_Sky130_basic_layerlayouts_1.png)  
 ![Sky130 Layer Layout 2](3_Lab_to_Sky130_basic_layerlayouts_2.png)
+
+
+## Task 4 - Standard Cell Layout Creation and Port Identification
+
+**1. Verification of Port Connections**  
+
+Using Magic, the input and output nodes of the inverter were verified:
+
+- **Input Port (A):** Polysilicon gate connection.  
+- **Output Port (Y):** Local Interconnect (`li1`) connecting PMOS and NMOS drains.  
+- **Power & Ground Ports:** Top rail labeled VDD, bottom rail labeled GND.
+
+**2. Layout Selection and Verification**  
+
+- **`s` (Select):** Highlighted all transistors and interconnects to ensure selection.  
+- **`v` (View):** Fit the layout in the window to visually check symmetry between PMOS and NMOS.
+
+**3. Creating the Extraction File (.ext)**  
+
+- **Command:** `extract all` in Magic `tkcon`.  
+- **Result:** Generated `.ext` file containing layer areas, overlaps, and parasitic information.
+
+**4. Converting to SPICE Format**  
+
+- **Commands:**  
+  1. `ext2spice lvs` – Layout vs Schematic mode.  
+  2. `ext2spice` – Final SPICE netlist conversion.  
+- **Observation:** Created `sky130_inv.spice` representing transistors with parasitic capacitances.
+
+**5. Final Layout Inspection with 'what' Command**  
+
+- **Process:** Placed cursor on VDD rail (horizontal) and Poly gate (vertical), pressed `s`, typed `what`.  
+- **Confirmation:** Horizontal metal is `li1`, vertical component is `poly`, verifying layout correctness.
+
+**Screenshots :**  
+![Std Cell Layout 1](4_Lab_step_to_creat_std_layout_1.png)  
+![Std Cell Layout 2](4_Lab_step_to_creat_std_layout_2.png)  
+![Std Cell Layout 3](4_Lab_step_to_creat_std_layout_3.png)  
+![Std Cell Layout 4](4_Lab_step_to_creat_std_layout_4.png)  
+![Std Cell Layout 5](4_Lab_step_to_creat_std_layout_5.png)  
+![Std Cell Layout 6](4_Lab_step_to_creat_std_layout_6.png)  
+![Std Cell Layout 7](4_Lab_step_to_creat_std_layout_7.png)  
+![Std Cell Layout 8](4_Lab_step_to_creat_std_layout_8.png)
