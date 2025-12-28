@@ -1,4 +1,37 @@
-# Day 1 – Foundation of Open Source VLSI Design
+## Day 1 – Foundation of Open Source VLSI Design
+
+**Summary of Day 1:**
+
+- **Objective:** Familiarize with the SkyWater 130nm PDK (`sky130A`) and OpenLANE RTL-to-GDSII flow, preparing the environment for ASIC design.
+- **PDK Exploration:**  
+  - Studied `libs.ref` for timing (`.lib`), abstract layout (`.lef`), and geometric layout (`.gds`, `.mag`).  
+  - Studied `libs.tech` for tool-specific configurations (Magic, Netgen, KLayout).  
+  - Explored the `sky130_fd_sc_hd` standard cell library and understood its hierarchy and file types.
+- **OpenLANE Environment Setup:**  
+  - Entered Docker container to access the pre-configured EDA toolchain (Yosys, OpenROAD, Magic, OpenSTA).  
+  - Started an interactive Tcl session for step-by-step RTL-to-GDSII flow.  
+  - Prepared the `picorv32a` design using the `prep` command, merging Technology LEF and Cell LEFs and creating timestamped runs directories.
+- **Design Architecture Audit:**  
+  - Verified the presence of RTL (Verilog) and Timing Constraint (SDC) files.  
+  - Examined configuration `.tcl` files and confirmed overrides for clock period and target density.
+- **Logic Synthesis & Functional Mapping:**  
+  - Converted RTL to Gate-Level Netlist using Yosys.  
+  - Performed technology mapping, logic minimization, and optimization with ABC.  
+  - Verified cell usage, total gate count, and chip area.  
+  - Calculated the Flop Ratio to understand sequential vs. combinational logic density.
+- **Characterizing Synthesis Results:**  
+  - Verified Gate-Level Netlist and synthesis statistics (cell types, chip area).  
+  - Checked preliminary timing using slack and critical path analysis.  
+  - Ensured all cells used respected library constraints and fanout limits.
+- **Environment Verification:**  
+  - Confirmed all 6 metal layers (li1 to met5) were recognized.  
+  - Confirmed `sky130_fd_sc_hd` library was correctly linked.  
+  - Verified workspace organization under `runs/` for logs, reports, netlists, and layouts.
+- **Outcome:**  
+  - Achieved a full understanding of the PDK and OpenLANE workflow.  
+  - Prepared the `picorv32a` design for synthesis, timing analysis, and physical design.  
+  - Established a solid foundation for Day 2 tasks like Floorplanning and Placement.
+
 
 ## Task 1: Directory Structure and Details
 
@@ -113,4 +146,42 @@ I verified that a new **Gate-Level Netlist (.v)** was generated in the `runs` di
 ![Synthesis 7](3_Logic_Synthesis_and_%20Functional_%20Mapping_8.png)  
 ![Synthesis 8](3_Logic_Synthesis_and_%20Functional_%20Mapping_9.png)  
 ![Synthesis 9](3_Logic_Synthesis_and_%20Functional_%20Mapping_1.png)
+
+## Task 4 - Characterizing & Analyzing Synthesis Results
+
+**1. Verification of the Gate-Level Netlist (GLN)**  
+I first verified that the **Gate-Level Netlist** was successfully generated.  
+- I navigated to the `results/synthesis/` directory to locate the output file (usually `picorv32a.synthesis.v`).  
+- This netlist is the structural version of my design, where high-level Verilog has been replaced by specific standard cells from the **Sky130_fd_sc_hd** library.
+
+**2. Analysis of the Synthesis Statistics Report**  
+I examined the `.stat` report and terminal logs to audit the design quantitatively.  
+- **Cell Mapping Audit:** Checked which gates were used most (e.g., NAND2, NOR2, Inverters).  
+- **Area Calculation:** Noted the total "Chip Area," which sets the minimum size of the chip for Floorplanning.
+
+**3. Calculating the Flop Ratio (Sequential vs. Combinational)**  
+I calculated the **Flop Ratio** to understand logic density:  
+- Counted the number of **Flip-Flops** (e.g., `sky130_fd_sc_hd__dfxtp_2`) and divided by the **Total Number of Cells**.  
+- **Insight:** A ratio around **10-15%** for `picorv32a` indicates a balanced architecture and helps anticipate Clock Tree Synthesis complexity.
+
+**4. Timing Characterization (Pre-Layout STA)**  
+I performed a preliminary timing check using synthesis timing reports:  
+- **Setup Slack Analysis:** Verified that slack values were positive, confirming the design can run at the target clock frequency (e.g., 200MHz).  
+- **Critical Path Identification:** Identified the longest path in the logic, allowing me to optimize RTL or synthesis strategy before physical design.
+
+**5. Cell Library Characterization Mapping**  
+I ensured the synthesis respected the target library:  
+- Verified that no "don't use" cells were employed.  
+- Checked gate driving strengths to confirm they meet fanout constraints from `config.tcl`.
+
+**Screenshots :**  
+![Synthesis Analysis 1](4_Characterizing_and_Analyzing_Synthesis_Results_1.png)  
+![Synthesis Analysis 2](4_Characterizing_and_Analyzing_Synthesis_Results_2.png)  
+![Synthesis Analysis 3](4_Characterizing_and_Analyzing_Synthesis_Results_3.png)  
+![Synthesis Analysis 4](4_Characterizing_and_Analyzing_Synthesis_Results_4.png)  
+![Synthesis Analysis 5](4_Characterizing_and_Analyzing_Synthesis_Results_5.png)  
+![Synthesis Analysis 6](4_Characterizing_and_Analyzing_Synthesis_Results_6.png)  
+![Synthesis Analysis 7](4_Characterizing_and_Analyzing_Synthesis_Results_7.png)  
+![Synthesis Analysis 8](4_Characterizing_and_Analyzing_Synthesis_Results_8.png)  
+![Synthesis Analysis 9](4_Characterizing_and_Analyzing_Synthesis_Results_9.png)
 
