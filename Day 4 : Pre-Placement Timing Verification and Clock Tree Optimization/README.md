@@ -80,3 +80,61 @@ The generated LEF file was moved to the `designs/picorv32a/src/` folder to integ
 ![LEF Conversion 7](2_Convert_magic_layout_to_std_cell_7.png)
 
 
+## Task 3 – Introduction to Timing Libraries (.lib)
+
+In this task, you bridge the gap between physical layout and timing analysis. By understanding the timing libraries, you ensure that OpenLANE knows exactly how much delay your custom inverter adds to the `picorv32a` design.
+
+**Identifying the Timing Library Corner**
+
+You navigated the directory structure to locate the Liberty (.lib) files. The primary reference was `sky130_fd_sc_hd__tt_025C_1v80.lib`. The environmental parameters were verified: **TT** (Typical-Typical process), **25°C** (Ambient Temperature), and **1.80V** (Operating Voltage). This ensures timing calculations match real silicon conditions.
+
+**Anatomy of a Cell Definition**
+
+Inside the `.lib` file, you inspected the logical description of standard cells:
+
+- **Cell Area:** Confirmed the `area` attribute matches the LEF dimensions.  
+- **Leakage Power:** Noted the power dissipation values for the cell when idle.
+
+**The Lookup Table (LUT) Model**
+
+The LUT is the "brain" of timing analysis. You analyzed 2D matrices that calculate delays based on:
+
+- **Input Transition vs Output Load:** Gate delay depends on the input signal transition speed and the output load capacitance.  
+- **Table Search:** Verified `rise_transition` and `fall_transition` tables, which correlate with the delays measured in **ngspice**.
+
+**Pin Characteristics & Capacitance**
+
+You checked the pin definitions to verify electrical load:
+
+- **Directionality:** Pins are marked as `input` or `output`.  
+- **Capacitance:** Input pin capacitances are used to calculate the load seen by preceding gates.
+
+**Integration in OpenLANE**
+
+To finalize this task, the following steps were executed:
+
+- **Read Library:** Loaded the `.lib` files into the current OpenLANE session.  
+- **Link Design:** Ensured the synthesized `picorv32a` netlist used these library definitions.  
+- **Verification:** Confirmed that timing models for all gates, including the custom inverter, were loaded and ready for Static Timing Analysis (STA).
+
+**Screenshots :**
+
+![Timing Libs 1](3_Introduction_to_timing_libs_1.png)  
+![Timing Libs 2](3_Introduction_to_timing_libs_2.png)  
+![Timing Libs 3](3_Introduction_to_timing_libs_3.png)  
+![Timing Libs 4](3_Introduction_to_timing_libs_4.png)  
+![Timing Libs 5](3_Introduction_to_timing_libs_5.png)  
+![Timing Libs 6](3_Introduction_to_timing_libs_6.png)  
+![Timing Libs 7](3_Introduction_to_timing_libs_7.png)  
+![Timing Libs 8](3_Introduction_to_timing_libs_8.png)  
+![Timing Libs 9](3_Introduction_to_timing_libs_9.png)  
+![Timing Libs 10](3_Introduction_to_timing_libs_10.png)  
+![Timing Libs 11](3_Introduction_to_timing_libs_11.png)  
+![Timing Libs 12](3_Introduction_to_timing_libs_12.png)  
+![Timing Libs 13](3_Introduction_to_timing_libs_13.png)  
+![Timing Libs 14](3_Introduction_to_timing_libs_14.png)  
+![Timing Libs 15](3_Introduction_to_timing_libs_15.png)  
+![Timing Libs 16](3_Introduction_to_timing_libs_16.png)  
+![Timing Libs 17](3_Introduction_to_timing_libs_17.png)  
+![Timing Libs 18](3_Introduction_to_timing_libs_18.png)
+
