@@ -84,38 +84,39 @@ The tool applies environment variables to shape the chip:
 
 ## Task 2 - Library Cell and Design Configuration Analysis
 
-**1. REVIEW OF DESIGN CONFIGURATION FILES**
+**1. Review of design configuration files**
 
 Navigation was done into the `designs/picorv32a` directory to inspect the configuration hierarchy.
 
-- **`config.tcl`:** Top-level design variables were verified, including the clock period, utilization factor, and aspect ratio.  
-- **`sky130_fd_sc_hd_config.tcl`:** Library-specific overrides defining the standard cell parameters for the **High Density (HD)** Sky130 library were identified.
+- **`config.tcl`**: Top-level design variables were verified, including the clock period, utilization factor, and aspect ratio.  
+- **`sky130_fd_sc_hd_config.tcl`**: Library-specific overrides defining the standard cell parameters for the High Density (HD) Sky130 library were identified.
 
-**2. ANALYSIS OF THE MERGED LEF FILE**
+**2. Analysis of the merged LEF file**
 
-The merged Library Exchange Format (**LEF**) file was confirmed to be generated and located successfully.
+The merged Library Exchange Format (LEF) file was confirmed to be generated and located successfully.
 
-- **Path:** Located in the `tmp/` directory of the current run.  
-- **Content:** Contains macro-level information of the standard cells, combining the **Technology LEF** (layer information, via rules) and **Cell LEF** (physical dimensions and pin locations). This file serves as the placement reference without requiring transistor-level GDSII data.
+- **Path**: Located in the `tmp/` directory of the current run.  
+- **Content**: Contains macro-level information of the standard cells, combining the Technology LEF (layer information, via rules) and Cell LEF (physical dimensions and pin locations). This file serves as the placement reference without requiring transistor-level GDSII data.
 
-**3. INSPECTION OF THE FLOORPLAN DEF RESULTS**
+**3. Inspection of the floorplan DEF results**
 
 The path to the newly created `picorv32a.floorplan.def` file was observed.
 
-- **Unit Mapping:** The `DISTANCE PIXELS PER MICRON` value (typically 1000) was noted, enabling conversion of DEF coordinates into actual micrometers.  
-- **Component Count:** Logs listed the number of defined "Components" (standard cells) and "Pins" in the physical layout.
+- **Unit mapping**: The `DISTANCE PIXELS PER MICRON` value (typically 1000) was noted, enabling conversion of DEF coordinates into actual micrometers.  
+- **Component count**: Logs listed the number of defined "Components" (standard cells) and "Pins" in the physical layout.
 
-**4. VERIFICATION OF STANDARD CELL LIBRARY PATHS**
+**4. Verification of standard cell library paths**
 
-Paths to the **Liberty (.lib)** files were checked.
+Paths to the Liberty (.lib) files were checked.
 
-- **Function:** The flow points to `sky130_fd_sc_hd__tt_025C_1v80.lib` (Typical–Typical corner), which provides timing, power, and electrical characterization for all standard cells used in the design.
+- **Function**: The flow points to `sky130_fd_sc_hd__tt_025C_1v80.lib` (Typical–Typical corner), which provides timing, power, and electrical characterization for all standard cells used in the design.
 
-**5. IDENTIFICATION OF DEFAULT VS. CUSTOM PARAMETERS**
+**5. Identification of default vs. custom parameters**
 
-The distinction between **Default OpenLANE variables** and **Design-specific variables** was identified.
+The distinction between Default OpenLANE variables and Design-specific variables was identified.
 
-- Parameters defined in `designs/picorv32a/config.tcl` were prioritized over system-wide defaults, ensuring the `picorv32a` design adheres to the intended floorplanning and library constraints.
+- **Parameters**: Defined in `designs/picorv32a/config.tcl` and prioritized over system-wide defaults, ensuring the `picorv32a` design adheres to the intended floorplanning and library constraints.
+
 
 **Screenshots :**  
 ![Floorplan Review 1](2_Review_floorplan_files_1.png)  
@@ -132,39 +133,40 @@ The distinction between **Default OpenLANE variables** and **Design-specific var
 
 ## Task 3 - Reviewing Floorplan Layout in Magic
 
-**1. VISUALIZING THE FLOORPLAN**
+**1. Visualizing the floorplan**
 
-The floorplan DEF file was loaded into the **Magic VLSI** tool to perform a visual verification of the physical layout. This step validates that logical constraints such as core area, die area, utilization factor, and aspect ratio were correctly translated into physical geometry on silicon.
+The floorplan DEF file was loaded into the Magic VLSI tool to perform a visual verification of the physical layout. This step validates that logical constraints such as core area, die area, utilization factor, and aspect ratio were correctly translated into physical geometry on silicon.
 
-**2. LAYOUT NAVIGATION AND CONTROL**
+**2. Layout navigation and control**
 
 Standard Magic navigation commands were used to inspect the layout efficiently.
 
-- **View Centering:** Pressing `v` aligned the entire die area to the center of the window, providing a complete view of chip boundaries.  
-- **Object Selection:** Pressing `s` enabled selection of layout objects or layers.  
-- **Precision Zooming:** A bounding box was created using left-click (first corner) and right-click (diagonal corner), followed by pressing `z` to zoom into the selected region for detailed inspection.
+- **View centering**: Pressing `v` aligned the entire die area to the center of the window, providing a complete view of chip boundaries.  
+- **Object selection**: Pressing `s` enabled selection of layout objects or layers.  
+- **Precision zooming**: A bounding box was created using left-click (first corner) and right-click (diagonal corner), followed by pressing `z` to zoom into the selected region for detailed inspection.
 
-**3. COMPONENT INSPECTION AND IDENTIFICATION**
+**3. Component inspection and identification**
 
 Specific layout objects were selected and queried to verify correctness.
 
-- **Horizontal Object Inspection:** Horizontal elements such as power straps and I/O pins were selected using `s`.  
-- **Object Query:** The `what` command was executed in the Magic console (tkcon) to identify object properties, including metal layer assignment (e.g., `met2`) and coordinate information.
+- **Horizontal object inspection**: Horizontal elements such as power straps and I/O pins were selected using `s`.  
+- **Object query**: The `what` command was executed in the Magic console (tkcon) to identify object properties, including metal layer assignment (e.g., `met2`) and coordinate information.
 
-**4. ROW AND PIN VERIFICATION**
+**4. Row and pin verification**
 
 The core region was inspected to confirm the presence and correctness of key floorplan elements.
 
-- **Standard Cell Rows:** Horizontal placement rows were observed, confirming readiness for standard cell placement.  
-- **I/O Pins:** Pins were verified along the die boundary with correct spacing and alignment.  
-- **Physical-Only Cells:** Tap cells and decoupling capacitor (Decap) cells inserted during floorplanning were confirmed, ensuring electrical reliability.
+- **Standard cell rows**: Horizontal placement rows were observed, confirming readiness for standard cell placement.  
+- **I/O pins**: Pins were verified along the die boundary with correct spacing and alignment.  
+- **Physical-only cells**: Tap cells and decoupling capacitor (Decap) cells inserted during floorplanning were confirmed, ensuring electrical reliability.
 
-**5. VERTICAL COMPONENT IDENTIFICATION**
+**5. Vertical component identification**
 
 Vertical layout components were inspected using the same selection and query process.
 
-- Vertical power straps and side I/O pins were selected and analyzed using `s` and `what`.  
-- Metal layer assignments (typically `met3`) were verified, confirming a valid multi-layer routing grid for subsequent placement and routing stages.
+- **Vertical power straps and side I/O pins**: Selected and analyzed using `s` and `what`.  
+- **Metal layer assignments**: Typically `met3`, confirming a valid multi-layer routing grid for subsequent placement and routing stages.
+
 
 **Screenshots :**
 ![Magic Floorplan 1](3_Review_floorplan_layout_in_magic_1.png)
