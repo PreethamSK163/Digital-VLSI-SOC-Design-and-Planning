@@ -82,40 +82,36 @@ The generated LEF file was moved to the `designs/picorv32a/src/` folder to integ
 
 ## Task 3 – Introduction to Timing Libraries (.lib)
 
-In this task, you bridge the gap between physical layout and timing analysis. By understanding the timing libraries, you ensure that OpenLANE knows exactly how much delay your custom inverter adds to the `picorv32a` design.
+In this task, I bridged the gap between physical layout and timing analysis. Understanding the timing libraries ensures OpenLANE knows how much delay the custom inverter adds to the `picorv32a` design.
 
 **Identifying the Timing Library Corner**
 
-You navigated the directory structure to locate the Liberty (.lib) files. The primary reference was `sky130_fd_sc_hd__tt_025C_1v80.lib`. The environmental parameters were verified: **TT** (Typical-Typical process), **25°C** (Ambient Temperature), and **1.80V** (Operating Voltage). This ensures timing calculations match real silicon conditions.
+Located the Liberty (.lib) files, primarily using `sky130_fd_sc_hd__tt_025C_1v80.lib`. Verified environmental parameters: **TT** (Typical-Typical process), **25°C**, and **1.80V**, matching real silicon conditions.
 
 **Anatomy of a Cell Definition**
 
-Inside the `.lib` file, you inspected the logical description of standard cells:
+Checked the logical description of standard cells:
 
-- **Cell Area:** Confirmed the `area` attribute matches the LEF dimensions.  
-- **Leakage Power:** Noted the power dissipation values for the cell when idle.
+- **Cell Area:** Matches LEF dimensions.  
+- **Leakage Power:** Observed idle power dissipation.
 
-**The Lookup Table (LUT) Model**
+**Lookup Table (LUT) Model**
 
-The LUT is the "brain" of timing analysis. You analyzed 2D matrices that calculate delays based on:
+Analyzed 2D matrices used for delay calculation:
 
-- **Input Transition vs Output Load:** Gate delay depends on the input signal transition speed and the output load capacitance.  
-- **Table Search:** Verified `rise_transition` and `fall_transition` tables, which correlate with the delays measured in **ngspice**.
+- **Input Transition vs Output Load:** Delay depends on input transition and output capacitance.  
+- **Rise/Fall Tables:** Verified data aligns with delays from **ngspice**.
 
 **Pin Characteristics & Capacitance**
 
-You checked the pin definitions to verify electrical load:
+Verified electrical load on pins:
 
-- **Directionality:** Pins are marked as `input` or `output`.  
-- **Capacitance:** Input pin capacitances are used to calculate the load seen by preceding gates.
+- **Direction:** Pins are defined as `input` or `output`.  
+- **Capacitance:** Used to calculate the load for preceding gates.
 
 **Integration in OpenLANE**
 
-To finalize this task, the following steps were executed:
-
-- **Read Library:** Loaded the `.lib` files into the current OpenLANE session.  
-- **Link Design:** Ensured the synthesized `picorv32a` netlist used these library definitions.  
-- **Verification:** Confirmed that timing models for all gates, including the custom inverter, were loaded and ready for Static Timing Analysis (STA).
+Loaded the `.lib` files into the session, linked the `picorv32a` netlist, and confirmed timing models, including the custom inverter, were ready for STA.
 
 **Screenshots :**
 
@@ -140,41 +136,41 @@ To finalize this task, the following steps were executed:
 
 ## Task 4 – Configuring Synthesis to Fix Slack
 
-In this task, you focused on resolving timing violations identified during the initial synthesis. By adjusting the OpenLANE configuration variables, you guided the tool to prioritize speed over area to eliminate "Negative Slack."
+In this task, I focused on resolving timing violations from the initial synthesis by adjusting OpenLANE configuration to prioritize speed over area and eliminate Negative Slack.
 
 **Identifying the Slack Violation**
 
-You began by reviewing the initial Static Timing Analysis (STA) report in the terminal:
+Reviewed the STA report:
 
-- **Negative Slack:** Observed a "Worst Negative Slack" (WNS) value, indicating that the data path was slower than the required clock period.  
-- **Violation Path:** The report highlighted specific gates in the `picorv32a` netlist where the "Data Arrival Time" exceeded the "Required Time."
+- **Negative Slack:** WNS indicated paths slower than the required clock period.  
+- **Violation Path:** Specific gates in the `picorv32a` netlist exceeded the required arrival time.
 
 **Modifying Synthesis Strategy**
 
-To fix the timing, the following OpenLANE environment variables were updated:
+Updated OpenLANE variables:
 
-- **SYNTH_STRATEGY:** Adjusted to focus on reducing delay even if total chip area increases.  
-- **SYNTH_BUFFERING:** Enabled to allow buffer insertion to strengthen weak signals.  
-- **SYNTH_SIZING:** Enabled gate sizing, replacing small, slow gates with larger, higher-drive versions.
+- **SYNTH_STRATEGY:** Prioritized delay reduction over area.  
+- **SYNTH_BUFFERING:** Enabled insertion of buffers to strengthen weak signals.  
+- **SYNTH_SIZING:** Enabled gate sizing to replace small gates with larger, higher-drive versions.
 
 **Re-running the Synthesis**
 
-After updating the configurations, synthesis was executed again:
+Executed synthesis again:
 
-- **Observation:** Terminal logs showed iterative logic restructuring, swapping cells, and inserting buffers to meet the timing constraints defined in the `.sdc` file.
+- **Observation:** Terminal logs showed iterative logic restructuring, cell swapping, and buffer insertion to meet timing constraints.
 
 **Analyzing the Improved Timing Report**
 
-Once synthesis completed, a fresh STA report was generated:
+Generated a fresh STA report:
 
-- **Slack Improvement:** WNS moved from a negative value toward zero or became positive.  
-- **Area Trade-off:** Slight increase in gate count and total area, which is expected when using larger, faster cells to fix timing.
+- **Slack Improvement:** WNS improved toward zero or positive.  
+- **Area Trade-off:** Slight increase in gate count and area, expected with faster cells.
 
 **Verifying Custom Cell Usage**
 
-The synthesis log was checked to confirm that the custom `sky130_vsdinv` cell was mapped in the netlist:
+Checked the synthesis log:
 
-- **Result:** The log confirmed that the custom inverter was utilized, helping to meet the overall timing goals.
+- **Result:** The custom `sky130_vsdinv` inverter was mapped and contributed to meeting timing goals.
 
 
 **Screenshots :**
@@ -194,50 +190,46 @@ The synthesis log was checked to confirm that the custom `sky130_vsdinv` cell wa
 ![Synthesis Slack 13](4_Configure_synthesis_setting%20to_fix_slack_13.png)  
 
 
-Here’s your Day 4, Task 5 content formatted for a GitHub README with **bold side topics** and proper headings:
-
-
 ## Task 5 – OpenSTA for Post-Synthesis Timing Analysis
 
-In this task, you performed a deep-dive Static Timing Analysis (STA) outside of the automated OpenLANE flow. This allows for a more granular inspection of the timing paths in the `picorv32a` design after the synthesis optimizations.
-
-
+In this task, I performed a detailed STA outside of the automated OpenLANE flow to inspect timing paths in the `picorv32a` design after synthesis optimizations.
 
 **Invoking the OpenSTA Tool**
 
-You moved from the general OpenLANE shell to the dedicated OpenSTA environment:
+Moved to the dedicated OpenSTA environment:
 
 - Executed `sta` in the terminal.  
-- **Purpose:** Provides detailed control over timing reports, allowing isolation of specific "bottleneck" paths.
+- **Purpose:** Provides detailed timing reports and allows isolation of critical paths.
 
 **Loading the Timing Environment**
 
-To perform the analysis, you manually sourced the necessary design data:
+Sourced the necessary design data:
 
-- **Read Libraries:** Loaded the `.lib` files for the Sky130 process.  
-- **Read Netlist:** Pointed to the optimized Verilog netlist from Task 4.  
-- **Read SDC:** Loaded the Synopsys Design Constraints file to define clock period and external delays.
+- **Read Libraries:** Loaded the Sky130 `.lib` files.  
+- **Read Netlist:** Used the optimized Verilog netlist from Task 4.  
+- **Read SDC:** Loaded the Synopsys Design Constraints file for clock and delay definitions.
 
 **Reporting Timing Path Details**
 
-A comprehensive timing report was generated:
+Generated a comprehensive timing report:
 
-- **Observation:** Line-by-line breakdown of the "Data Arrival Path." Delays from each gate and interconnect were clearly visible.  
+- **Observation:** Detailed line-by-line breakdown of data arrival paths, showing delays from each gate and interconnect.
 
 **Analyzing Fanout and Capacitance**
 
-OpenSTA was used to check for electrical violations:
+Checked for electrical violations:
 
-- **Check Fanout:** Identified pins with high fanout slowing signal transitions.  
-- **Check Capacitance:** Verified nets exceeding maximum allowed capacitance.  
-- **Result:** Determined where buffers needed to be added to strengthen signals across the `picorv32a` core.
+- **Fanout:** Identified pins with high fanout slowing signals.  
+- **Capacitance:** Verified nets for maximum allowed capacitance.  
+- **Result:** Determined where buffers were needed to strengthen signals across the core.
 
 **Refining the Design via OpenSTA**
 
-Manual adjustments ensured timing closure:
+Performed manual adjustments for timing closure:
 
-- **Upsizing Cells:** Critical gates with negative slack were replaced with stronger versions.  
-- **Slack Verification:** Reports were re-run to confirm improvements. This iterative process tuned the netlist before physical design.
+- **Upsizing Cells:** Replaced critical gates with stronger versions.  
+- **Slack Verification:** Re-ran reports to confirm improvements and iteratively tuned the netlist before moving to physical design.
+
 
 
 
@@ -251,4 +243,58 @@ Manual adjustments ensured timing closure:
 ![OpenSTA Timing 6](5_OpenSTA_for_post_synth_timing_analysis_6.png)  
 ![OpenSTA Timing 7](5_OpenSTA_for_post_synth_timing_analysis_7.png)  
 ![OpenSTA Timing 8](5_OpenSTA_for_post_synth_timing_analysis_8.png)  
+
+
+## Task 6 – Optimizing Synthesis to Reduce Setup Violations
+
+In this task, I focused on a final round of synthesis optimization. While previous tasks targeted general timing, this step was specifically aimed at reducing **Setup Violations** by aggressively restructuring the logic and adjusting cell sizes.
+
+**Identifying Setup Slack Violations**
+
+I started by analyzing the STA reports to find paths where the **Data Arrival Time** was dangerously close to, or exceeding, the **Required Time**:
+
+- **Setup Violation:** Occurs when the logic is too slow, and data doesn’t reach the destination flip-flop before the next clock edge.  
+- **Targeting the WNS:** I focused on the **Worst Negative Slack (WNS)** to identify the longest logic chains in the `picorv32a` design.
+
+**Adjusting Fanout Constraints**
+
+I observed that high fanout can slow signals and cause setup violations:
+
+- **`SYNTH_MAX_FANOUT`:** I lowered this value (e.g., 4 or 5) in the OpenLANE configuration.  
+- **Effect:** This forced the tool to insert extra buffers to "split" the load, allowing each gate to switch quickly.
+
+**Logic Restructuring and Gate Sizing**
+
+I enabled more aggressive optimization settings to shrink the delay:
+
+- **Cell Upsizing:** Allowed the tool to use "Drive Strength 2" or "Drive Strength 4" versions of cells to reduce delay.  
+- **Logic Flattening:** Reduced the number of logic levels between flip-flops to simplify paths and save timing.
+
+**Running the Optimized Synthesis**
+
+With the updated constraints, I ran the synthesis again:
+
+- **Terminal Observation:** I monitored the **ABC** pass, which performed technology mapping and logic optimization.  
+- **Comparison:** I verified that both "Gate Delay" and "Net Delay" decreased compared to the previous run.
+
+**Post-Optimization Verification**
+
+Finally, I checked the results of the optimization:
+
+- **Slack Status:** I confirmed that the setup violations were eliminated or significantly reduced.  
+- **Netlist Integrity:** I ensured that the functional logic remained intact despite the aggressive optimization and added buffers.
+
+**Screenshots**
+
+![Optimized Synthesis 1](6_Optimize_synthesis_to_reduce_step_violation_1.png)  
+![Optimized Synthesis 2](6_Optimize_synthesis_to_reduce_step_violation_2.png)  
+![Optimized Synthesis 3](6_Optimize_synthesis_to_reduce_step_violation_3.png)  
+![Optimized Synthesis 4](6_Optimize_synthesis_to_reduce_step_violation_4.png)  
+![Optimized Synthesis 5](6_Optimize_synthesis_to_reduce_step_violation_5.png)  
+![Optimized Synthesis 6](6_Optimize_synthesis_to_reduce_step_violation_6.png)  
+![Optimized Synthesis 7](6_Optimize_synthesis_to_reduce_step_violation_7.png)  
+![Optimized Synthesis 8](6_Optimize_synthesis_to_reduce_step_violation_8.png)  
+![Optimized Synthesis 9](6_Optimize_synthesis_to_reduce_step_violation_9.png)  
+![Optimized Synthesis 10](6_Optimize_synthesis_to_reduce_step_violation_10.png)
+
 
