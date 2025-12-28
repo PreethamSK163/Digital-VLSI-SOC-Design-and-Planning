@@ -31,8 +31,11 @@ My objective for this session was to understand the organization of the **SkyWat
 
 I successfully initialized the OpenLANE environment with the **Sky130A PDK**. I explored the `sky130_fd_sc_hd` library and confirmed that it contains all the necessary timing, physical, and layout views, giving me a solid foundation to proceed with synthesis and physical design.
 
-**Screenshot:**
-![Directory structure 1](1_Directory_structure_1.png)
-![Directory structure 2](1_Directory_structure_2.png)
-![Directory structure 3](1_Directory_structure_3.png)
-![Directory structure 4](1_Directory_structure_4.png)
+**Screenshots :**
+![Directory structure 1](1_Directory_structure_and_%20details_1.png)  
+![Directory structure 2](1_Directory_structure_and_%20details_2.png)  
+![Directory structure 3](1_Directory_structure_and_%20details_3.png)  
+![Directory structure 4](1_Directory_structure_and_%20details_4.png)
+
+
+
