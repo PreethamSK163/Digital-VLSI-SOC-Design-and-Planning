@@ -138,3 +138,58 @@ To finalize this task, the following steps were executed:
 ![Timing Libs 17](3_Introduction_to_timing_libs_17.png)  
 ![Timing Libs 18](3_Introduction_to_timing_libs_18.png)
 
+## Task 4 – Configuring Synthesis to Fix Slack
+
+In this task, you focused on resolving timing violations identified during the initial synthesis. By adjusting the OpenLANE configuration variables, you guided the tool to prioritize speed over area to eliminate "Negative Slack."
+
+**Identifying the Slack Violation**
+
+You began by reviewing the initial Static Timing Analysis (STA) report in the terminal:
+
+- **Negative Slack:** Observed a "Worst Negative Slack" (WNS) value, indicating that the data path was slower than the required clock period.  
+- **Violation Path:** The report highlighted specific gates in the `picorv32a` netlist where the "Data Arrival Time" exceeded the "Required Time."
+
+**Modifying Synthesis Strategy**
+
+To fix the timing, the following OpenLANE environment variables were updated:
+
+- **SYNTH_STRATEGY:** Adjusted to focus on reducing delay even if total chip area increases.  
+- **SYNTH_BUFFERING:** Enabled to allow buffer insertion to strengthen weak signals.  
+- **SYNTH_SIZING:** Enabled gate sizing, replacing small, slow gates with larger, higher-drive versions.
+
+**Re-running the Synthesis**
+
+After updating the configurations, synthesis was executed again:
+
+- **Observation:** Terminal logs showed iterative logic restructuring, swapping cells, and inserting buffers to meet the timing constraints defined in the `.sdc` file.
+
+**Analyzing the Improved Timing Report**
+
+Once synthesis completed, a fresh STA report was generated:
+
+- **Slack Improvement:** WNS moved from a negative value toward zero or became positive.  
+- **Area Trade-off:** Slight increase in gate count and total area, which is expected when using larger, faster cells to fix timing.
+
+**Verifying Custom Cell Usage**
+
+The synthesis log was checked to confirm that the custom `sky130_vsdinv` cell was mapped in the netlist:
+
+- **Result:** The log confirmed that the custom inverter was utilized, helping to meet the overall timing goals.
+
+
+**Screenshots**
+
+![Synthesis Slack 1](4_Configure_synthesis_setting%20to_fix_slack_1.png)  
+![Synthesis Slack 2](4_Configure_synthesis_setting%20to_fix_slack_2.png)  
+![Synthesis Slack 3](4_Configure_synthesis_setting%20to_fix_slack_3.png)  
+![Synthesis Slack 4](4_Configure_synthesis_setting%20to_fix_slack_4.png)  
+![Synthesis Slack 5](4_Configure_synthesis_setting%20to_fix_slack_5.png)  
+![Synthesis Slack 6](4_Configure_synthesis_setting%20to_fix_slack_6.png)  
+![Synthesis Slack 7](4_Configure_synthesis_setting%20to_fix_slack_7.png)  
+![Synthesis Slack 8](4_Configure_synthesis_setting%20to_fix_slack_8.png)  
+![Synthesis Slack 9](4_Configure_synthesis_setting%20to_fix_slack_9.png)  
+![Synthesis Slack 10](4_Configure_synthesis_setting%20to_fix_slack_10.png)  
+![Synthesis Slack 11](4_Configure_synthesis_setting%20to_fix_slack_11.png)  
+![Synthesis Slack 12](4_Configure_synthesis_setting%20to_fix_slack_12.png)  
+![Synthesis Slack 13](4_Configure_synthesis_setting%20to_fix_slack_13.png)  
+
