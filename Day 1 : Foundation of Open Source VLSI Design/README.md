@@ -39,3 +39,39 @@ I successfully initialized the OpenLANE environment with the **Sky130A PDK**. I 
 
 
 
+## Task 2 - Design Preparation Deep Dive
+
+**1. Initializing the OpenLANE Workspace**  
+I first set up the virtualized environment by entering the containerized shell, giving me access to the specialized EDA toolchain (Yosys, OpenROAD, Magic) and the SkyWater 130nm PDK. I then started an interactive Tcl session, which allowed me to run the physical design flow step by step and observe the results of each command.
+
+**2. Exploring the Design Architecture**  
+I performed a design audit by navigating through the `designs/picorv32a` directory.  
+- I confirmed the presence of the RTL (Verilog) and Timing Constraints (SDC) files, which define the chip’s functionality and timing.  
+- I examined the `.tcl` configuration files, noting that the picorv32a design had specific overrides for the clock period and target density, ensuring optimal synthesis.
+
+**3. Merging Technology and Cell Data (LEF Merging)**  
+I executed the preparation step, during which OpenLANE merged the Technology LEF (defining metal layers, via rules, and fabrication constraints) with the Cell LEFs (defining standard cell dimensions and pin locations).  
+This produced a merged LEF file, which I know will serve as the foundation for placement and routing to ensure the chip is manufacturable.
+
+**4. Workspace Management and Versioning**  
+I observed that OpenLANE automatically created a timestamped directory under `runs/`.  
+- This gave me a clean sandbox for my current session.  
+- I could now organize all reports, netlists, and layout files in one place.  
+- I realized that this setup allows me to compare different runs if I adjust constraints in future iterations.
+
+**5. Final Parameter Verification**  
+I verified that all 6 metal layers (li1 through met5) were recognized and confirmed that the `sky130_fd_sc_hd` library was correctly linked. This confirmed that my environment was ready for Synthesis.
+
+**Screenshot:**  
+![Design preparation 1](2_Design_preparation_step_1.png)  
+![Design preparation 2](2_Design_preparation_step_2.png)  
+![Design preparation 3](2_Design_preparation_step_3.png)  
+![Design preparation 4](2_Design_preparation_step_4.png)  
+![Design preparation 5](2_Design_preparation_step_5.png)  
+![Design preparation 6](2_Design_preparation_step_6.png)  
+![Design preparation 7](2_Design_preparation_step_7.png)  
+![Design preparation 8](2_Design_preparation_step_8.png)  
+![Design preparation 9](2_Design_preparation_step_9.png)  
+![Design preparation 10](2_Design_preparation_step_10.png)
+
+
