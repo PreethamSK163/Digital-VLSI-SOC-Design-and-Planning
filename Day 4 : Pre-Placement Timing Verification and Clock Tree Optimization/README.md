@@ -39,3 +39,44 @@ The boundaries of the standard cell were verified to ensure that the height and 
 ![Grid to Track 8](1_Convert_grid_info_to_track_info_8.png)
 
 
+## Task 2 – Converting Magic Layout to Standard Cell (LEF)
+
+In this task, the manual Magic layout of the custom inverter was converted into a standardized format (LEF) that the OpenLANE flow can recognize as a usable macro or "Standard Cell."
+
+
+**Naming and Port Definition**
+
+The first step was to associate all physical geometries with logical ports. Each port was assigned a class (input, output, or feedthrough) and a use (signal, power, or ground). The cell was given a unique name, `sky130_vsdinv`, to distinguish it from default library cells.
+
+**Setting the Cell Boundary (PR Boundary)**
+
+The "Place and Route" (PR) boundary of the cell was defined. This bounding box informs the placement tool of the space occupied by the cell. The boundary edges were aligned with the routing tracks from Task 1 to prevent overlaps or gaps when cells are placed side-by-side.
+
+**Executing the LEF Extraction**
+
+The Magic layout was converted into a Library Exchange Format (LEF) file. The terminal confirmed generation of `sky130_vsdinv.lef`. This LEF file contains abstract information such as the cell's size, pin locations (A and Y), and layer data, without including internal transistor details.
+
+**Inspecting the Generated LEF File**
+
+The LEF file was opened in a text editor to verify content:
+
+- **MACRO Definition:** `MACRO sky130_vsdinv` block was present.  
+- **PIN Information:** The `PIN A` and `PIN Y` sections matched the grid intersections set in Task 1.  
+- **OBS (Obstruction):** Areas reserved for internal metals were correctly defined to prevent routing conflicts.
+
+**Moving the LEF to the Design Directory**
+
+The generated LEF file was moved to the `designs/picorv32a/src/` folder to integrate with the project. Configuration files (`config.tcl`) or environment variables were updated to include this LEF file in the library search path.
+
+
+**Screenshots**
+
+![LEF Conversion 1](2_Convert_magic_layout_to_std_cell_1.png)  
+![LEF Conversion 2](2_Convert_magic_layout_to_std_cell_2.png)  
+![LEF Conversion 3](2_Convert_magic_layout_to_std_cell_3.png)  
+![LEF Conversion 4](2_Convert_magic_layout_to_std_cell_4.png)  
+![LEF Conversion 5](2_Convert_magic_layout_to_std_cell_5.png)  
+![LEF Conversion 6](2_Convert_magic_layout_to_std_cell_6.png)  
+![LEF Conversion 7](2_Convert_magic_layout_to_std_cell_7.png)
+
+
