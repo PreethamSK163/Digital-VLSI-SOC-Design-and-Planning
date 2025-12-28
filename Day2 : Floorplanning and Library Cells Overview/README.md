@@ -102,3 +102,39 @@ The distinction between **Default OpenLANE variables** and **Design-specific var
 ![Floorplan Review 10](2_Review_floorplan_files_10.png)  
 ![Floorplan Review 11](2_Review_floorplan_files_11.png)  
 
+## Task 3 - Reviewing Floorplan Layout in Magic
+
+**1. VISUALIZING THE FLOORPLAN**
+
+The floorplan DEF file was loaded into the **Magic VLSI** tool to perform a visual verification of the physical layout. This step validates that logical constraints such as core area, die area, utilization factor, and aspect ratio were correctly translated into physical geometry on silicon.
+
+**2. LAYOUT NAVIGATION AND CONTROL**
+
+Standard Magic navigation commands were used to inspect the layout efficiently.
+
+- **View Centering:** Pressing `v` aligned the entire die area to the center of the window, providing a complete view of chip boundaries.  
+- **Object Selection:** Pressing `s` enabled selection of layout objects or layers.  
+- **Precision Zooming:** A bounding box was created using left-click (first corner) and right-click (diagonal corner), followed by pressing `z` to zoom into the selected region for detailed inspection.
+
+**3. COMPONENT INSPECTION AND IDENTIFICATION**
+
+Specific layout objects were selected and queried to verify correctness.
+
+- **Horizontal Object Inspection:** Horizontal elements such as power straps and I/O pins were selected using `s`.  
+- **Object Query:** The `what` command was executed in the Magic console (tkcon) to identify object properties, including metal layer assignment (e.g., `met2`) and coordinate information.
+
+**4. ROW AND PIN VERIFICATION**
+
+The core region was inspected to confirm the presence and correctness of key floorplan elements.
+
+- **Standard Cell Rows:** Horizontal placement rows were observed, confirming readiness for standard cell placement.  
+- **I/O Pins:** Pins were verified along the die boundary with correct spacing and alignment.  
+- **Physical-Only Cells:** Tap cells and decoupling capacitor (Decap) cells inserted during floorplanning were confirmed, ensuring electrical reliability.
+
+**5. VERTICAL COMPONENT IDENTIFICATION**
+
+Vertical layout components were inspected using the same selection and query process.
+
+- Vertical power straps and side I/O pins were selected and analyzed using `s` and `what`.  
+- Metal layer assignments (typically `met3`) were verified, confirming a valid multi-layer routing grid for subsequent placement and routing stages.
+
