@@ -40,3 +40,4 @@ This task involved refining the floorplan by adjusting the I/O pin configuration
 ![IO Placer Revision 8](1_IO_Placer%20revision_8.png)  
 ![IO Placer Revision 9](1_IO_Placer%20revision_9.png)  
 ![IO Placer Revision 10](1_IO_Placer%20revision_10.png)
+
