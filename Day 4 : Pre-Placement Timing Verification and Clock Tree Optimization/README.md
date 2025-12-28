@@ -58,7 +58,7 @@ The input and output pins of the inverter were carefully checked to ensure their
 
 The boundaries of the standard cell were verified to ensure that the height and width are multiples of the vertical and horizontal track pitch, respectively. Additionally, the power (VDD) and ground (GND) rails were confirmed to be centered on the tracks, which is essential for proper automated Power Distribution Network (PDN) generation.
 
----
+
 
 **Screenshots :**
 
