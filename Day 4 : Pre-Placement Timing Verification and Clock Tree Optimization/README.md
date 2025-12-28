@@ -506,3 +506,52 @@ Generated full timing reports in OpenSTA:
 ![10_Analyze_timing_with_real_clock_6](10_Analyze_timing_with_real_clock_6.png)
 ![10_Analyze_timing_with_real_clock_7](10_Analyze_timing_with_real_clock_7.png)
 
+
+## Task 11 – Executing OpenSTA with Correct Timing Libraries
+
+In this task, I performed high-fidelity timing verification using OpenSTA, ensuring the analysis matched the exact same timing libraries used by OpenLANE. This step was essential for sign-off quality results before moving to the final physical stages.
+
+**Synchronizing the Library Environment**
+
+I configured OpenSTA to use the specific Sky130 library corners:
+
+- Selected `sky130_fd_sc_hd__tt_025C_1v80.lib` (Typical corner) for setup analysis.  
+- Verified that both the max (slowest) and min (fastest) library files were available to cover Setup and Hold scenarios.
+
+**Loading the Post-CTS Netlist and DEF**
+
+I loaded the latest physical data:
+
+- The netlist generated after Clock Tree Synthesis (Task 8), which includes the clock buffers.  
+- The DEF file with the physical placement of cells, enabling OpenSTA to estimate wire RC based on distances between pins.
+
+**Setting Up the Analysis Variables**
+
+Configured the STA environment to match OpenLANE:
+
+- Set units with `set_cmd_units` (time in ns, capacitance in pF).  
+- Read the Sky130 process models using `read_liberty`.  
+- Loaded and linked the `picorv32a` netlist with `read_verilog` and `link_design`.
+
+**Running the Timing Check**
+
+Executed the timing analysis:
+
+- Command: `report_checks -path_delay min_max -format full_clock_expanded`  
+- Observed the true slack values, accounting for real drive strengths of the clock buffers and actual cell capacitances.
+
+**Final Comparison and Sign-off**
+
+Compared these results with OpenLANE internal logs:
+
+- Verified that the slack values matched, confirming the automated flow’s timing is consistent with the standalone sign-off tool.  
+- Ensured the `picorv32a` design cleared final timing verification with accurate physical delay modeling.
+
+**Screenshot:**
+![11_Execute_OPENSTA_with_right_timing_libraries_1](11_Execute_OPENSTA_with_right_timing_libraries_1.png)
+![11_Execute_OPENSTA_with_right_timing_libraries_2](11_Execute_OPENSTA_with_right_timing_libraries_2.png)
+![11_Execute_OPENSTA_with_right_timing_libraries_3](11_Execute_OPENSTA_with_right_timing_libraries_3.png)
+![11_Execute_OPENSTA_with_right_timing_libraries_4](11_Execute_OPENSTA_with_right_timing_libraries_4.png)
+![11_Execute_OPENSTA_with_right_timing_libraries_5](11_Execute_OPENSTA_with_right_timing_libraries_5.png)
+![11_Execute_OPENSTA_with_right_timing_libraries_6](11_Execute_OPENSTA_with_right_timing_libraries_6.png)
+![11_Execute_OPENSTA_with_right_timing_libraries_7](11_Execute_OPENSTA_with_right_timing_libraries_7.png)
