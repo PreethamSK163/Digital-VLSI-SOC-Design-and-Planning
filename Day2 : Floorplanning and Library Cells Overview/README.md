@@ -145,3 +145,53 @@ Vertical layout components were inspected using the same selection and query pro
 ![Magic Floorplan 4](3_Review_floorplan_layout_in_magic_4.png)
 ![Magic Floorplan 5](3_Review_floorplan_layout_in_magic_5.png)
 ![Magic Floorplan 6](3_Review_floorplan_layout_in_magic_6.png)
+
+## Task 4 – Congestion-Aware Placement using RePlAce
+
+This task transitions the design from an empty floorplan to the actual physical placement of logic gates. The **RePlAce** engine within the OpenLANE flow is used to perform congestion-aware global placement followed by legalized detailed placement.
+
+**1. Placement Command Execution**  
+
+The placement stage was initiated using the `run_placement` command.  
+This step consumes the synthesized gate-level netlist along with the floorplan DEF and begins mapping standard cells into the predefined site rows generated during floorplanning.
+
+**2. Global Placement using RePlAce**  
+
+The **RePlAce** engine performs the global placement phase.
+
+- Standard cells are treated as a continuous distribution and spread across the core area.  
+- Initial positions are computed mathematically to minimize estimated wire length.  
+- Placement is performed with congestion awareness to ensure sufficient routing resources remain available for later stages.
+
+**3. Monitoring HPWL and Overflow Metrics**  
+
+During placement optimization, terminal logs provide real-time feedback through key metrics:
+
+- **HPWL (Half-Perimeter Wire Length):** Represents estimated total interconnect length. This value progressively decreases as placement improves.  
+- **Overflow:** Indicates cell overlap density. Iterative optimization continues until overflow is reduced to an acceptable level (typically below 0.1), confirming cells are evenly distributed.
+
+**4. Detailed Placement and Legalization**  
+
+After global placement convergence, the flow proceeds to **Detailed Placement** using **OpenDP**.
+
+- All standard cells are snapped precisely onto legal site rows.  
+- Power rail alignment and spacing rules are enforced.  
+- Overlaps are fully eliminated, ensuring placement legality.  
+
+At the end of this step, every standard cell has a fixed and valid coordinate on the silicon grid.
+
+**5. Placement DEF Generation**  
+
+Successful completion of placement is confirmed by the generation of the placement DEF file:
+
+- **Output File:** `results/placement/picorv32a.placement.def`  
+- The file contains a complete list of placed components with exact `(x, y)` coordinates.  
+- Compared to the floorplan DEF, this file includes detailed placement information for all standard cells.
+
+**Screenshots :**  
+![Placement 1](4_Congestion_aware_placement_using_RePIAce_1.png)  
+![Placement 2](4_Congestion_aware_placement_using_RePIAce_2.png)  
+![Placement 3](4_Congestion_aware_placement_using_RePIAce_3.png)  
+![Placement 4](4_Congestion_aware_placement_using_RePIAce_4.png)  
+![Placement 5](4_Congestion_aware_placement_using_RePIAce_5.png)
+
